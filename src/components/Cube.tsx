@@ -324,6 +324,7 @@ export default function Cube() {
 
     // paper phase
     tl.add(".stage-bg", { backgroundColor: ["#252423", "#f4f1ea"], duration: 900 }, 5200)
+      .add(".cube-title-el", { color: ["#f4f1ea", "#38352f"], duration: 900 }, 5200)
       .add("#cube-ink", { opacity: [1, 0], duration: 800 }, 5300)
       .add("#cube-paper", { opacity: [0, 1], duration: 800 }, 5300)
       .add(".paper-notes", { opacity: [0, 1], duration: 800 }, 5900)
@@ -348,6 +349,7 @@ export default function Cube() {
     // power down
     tl.add("#cube-paper", { opacity: [1, 0], duration: 900 }, 10500)
       .add("#cube-ink", { opacity: [0, 1], duration: 900 }, 10500)
+      .add(".cube-title-el", { color: ["#38352f", "#f4f1ea"], duration: 900 }, 10500)
       .add(".stage-bg", { backgroundColor: ["#f4f1ea", "#252423"], duration: 900 }, 10500);
 
     const scroll = onScroll({
@@ -375,8 +377,8 @@ export default function Cube() {
           <div className="stage-bg absolute inset-0 bg-[#252423]" />
 
           <div className="absolute top-20 md:top-24 left-0 right-0 text-center px-6 pointer-events-none z-10">
-            <p className="m-eyebrow mb-4">fig. 1 — exploded axonometric</p>
-            <h2 className="m-head font-display font-medium text-[#f4f1ea] text-4xl md:text-6xl tracking-tight">
+            <p className="m-eyebrow mb-4 cube-title-el">fig. 1 — exploded axonometric</p>
+            <h2 className="m-head font-display font-medium text-[#f4f1ea] text-4xl md:text-6xl tracking-tight cube-title-el">
               Anatomy of a cube.
             </h2>
           </div>
