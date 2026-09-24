@@ -21,8 +21,8 @@ export default function ScrollDraw() {
         sync: true,
         enter: "top top",
         leave: "bottom bottom",
+        onUpdate: (obs: { progress: number }) => setPct(Math.round(obs.progress * 100)),
       }),
-      onUpdate: (self: { progress: number }) => setPct(Math.round(self.progress)),
     });
     return () => {
       anim.pause();
