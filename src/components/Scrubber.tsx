@@ -87,6 +87,9 @@ export default function Scrubber() {
         ref={track}
         role="slider"
         aria-label="page progress"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={0}
         aria-valuetext={chapter}
         tabIndex={0}
         className="relative h-6 cursor-ew-resize touch-none outline-none"
