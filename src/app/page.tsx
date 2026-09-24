@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import Backdrop from "@/components/Backdrop";
 import Hero from "@/components/Hero";
-import Camera from "@/components/Camera";
+import Cube from "@/components/Cube";
 import Ticker from "@/components/Ticker";
 import ApiDemo from "@/components/ApiDemo";
 import Transforms from "@/components/Transforms";
@@ -22,7 +22,7 @@ export default function Home() {
       <Backdrop />
       <main className="relative">
         <Hero />
-        <Camera />
+        <Cube />
         <Ticker />
         <ApiDemo />
         <Transforms />

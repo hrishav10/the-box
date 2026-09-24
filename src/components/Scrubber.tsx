@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 const CHAPTERS = [
   { id: "top", label: "intro" },
-  { id: "camera", label: "camera" },
+  { id: "cube", label: "cube" },
   { id: "api", label: "api" },
   { id: "transforms", label: "transforms" },
   { id: "scroll", label: "scroll" },
