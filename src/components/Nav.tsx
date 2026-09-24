@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { animate } from "animejs";
 
 const LINKS = [
+  { label: "machine", href: "#machine" },
   { label: "api", href: "#api" },
   { label: "scroll", href: "#scroll" },
   { label: "stagger", href: "#stagger" },

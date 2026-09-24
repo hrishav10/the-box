@@ -14,6 +14,7 @@
   --color-yellow: #ffcc2a;
   --color-magenta: #e962bf;
   --color-purple: #a369ff;
+  --color-copper: #e08d57;
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-archivo-black), "Arial Black", ui-sans-serif, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
@@ -69,6 +70,20 @@ body {
 
 .scroll-path {
   will-change: stroke-dashoffset;
+}
+
+@keyframes chev-bounce {
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(45deg);
+  }
+}
+
+.chev-bounce {
+  animation: chev-bounce 1.6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

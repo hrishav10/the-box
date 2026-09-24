@@ -17,7 +17,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-white/10 px-6 py-28">
+    <footer id="outro" className="relative z-10 overflow-hidden border-t border-white/10 px-6 py-28">
       <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
         <div className="footer-box grid size-24 place-items-center rounded-3xl bg-red font-mono text-4xl font-bold text-cream">
           ▣

@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Backdrop from "@/components/Backdrop";
 import Hero from "@/components/Hero";
+import Machine from "@/components/Machine";
 import Ticker from "@/components/Ticker";
 import ApiDemo from "@/components/ApiDemo";
 import Transforms from "@/components/Transforms";
@@ -12,6 +13,7 @@ import DragBox from "@/components/DragBox";
 import Clockwork from "@/components/Clockwork";
 import Easings from "@/components/Easings";
 import Footer from "@/components/Footer";
+import Scrubber from "@/components/Scrubber";
 
 export default function Home() {
   return (
@@ -20,6 +22,7 @@ export default function Home() {
       <Backdrop />
       <main className="relative">
         <Hero />
+        <Machine />
         <Ticker />
         <ApiDemo />
         <Transforms />
@@ -32,6 +35,7 @@ export default function Home() {
         <Easings />
       </main>
       <Footer />
+      <Scrubber />
     </>
   );
 }
