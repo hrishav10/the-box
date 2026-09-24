@@ -1,54 +1,54 @@
 "use client";
 
 import { useEffect } from "react";
-import { createTimeline, stagger } from "animejs";
+import { animate } from "animejs";
 
 const LINKS = [
-  { label: "stagger", href: "#stagger" },
+  { label: "api", href: "#api" },
   { label: "scroll", href: "#scroll" },
-  { label: "morph", href: "#morph" },
-  { label: "path", href: "#path" },
-  { label: "drag", href: "#drag" },
+  { label: "stagger", href: "#stagger" },
+  { label: "springs", href: "#springs" },
+  { label: "clock", href: "#clock" },
 ];
 
 export default function Nav() {
   useEffect(() => {
-    createTimeline({ defaults: { ease: "outExpo" } })
-      .add(".nav-shell", { y: [-64, 0], opacity: [0, 1], duration: 800 }, 200)
-      .add(
-        ".nav-link",
-        { y: [14, 0], opacity: [0, 1], duration: 500, delay: stagger(70) },
-        550
-      );
+    animate(".nav-item", {
+      y: [-24, 0],
+      opacity: [0, 1],
+      duration: 700,
+      ease: "outExpo",
+      delay: (_: unknown, i: number = 0) => i * 70,
+    });
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="nav-shell mx-auto mt-4 flex max-w-6xl items-center justify-between rounded-2xl border border-white/10 bg-void/70 px-5 py-3 opacity-0 backdrop-blur-xl">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-lg bg-lime font-mono text-sm font-bold text-void">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-coal/80 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
+        <a href="#top" className="nav-item flex items-center gap-2.5" aria-label="the box home">
+          <span className="grid size-6 place-items-center rounded-[6px] bg-red font-mono text-sm font-bold text-cream">
             ▣
           </span>
-          <span className="font-mono text-sm font-bold tracking-[0.25em]">
-            THE_BOX
-          </span>
+          <span className="font-mono text-sm font-bold tracking-tight">the_box</span>
         </a>
-        <div className="hidden items-center gap-7 sm:flex">
+        <div className="hidden items-center gap-7 md:flex">
           {LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="nav-link font-mono text-xs uppercase tracking-[0.2em] text-dim opacity-0 transition-colors hover:text-lime"
+              className="nav-item font-mono text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-cream"
             >
               {l.label}
             </a>
           ))}
         </div>
         <a
-          href="#drag"
-          className="nav-link rounded-full bg-bone px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.15em] text-void opacity-0 transition-colors hover:bg-lime"
+          href="https://github.com/hrishav10/the-box"
+          target="_blank"
+          rel="noreferrer"
+          className="nav-item rounded-full border border-white/15 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.15em] text-cream transition-colors hover:border-red hover:text-red"
         >
-          play
+          github ↗
         </a>
       </nav>
     </header>

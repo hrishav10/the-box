@@ -1,15 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #0a0a0b;
-  --color-panel: #121214;
-  --color-bone: #f5f4ef;
-  --color-dim: #8e8e93;
-  --color-lime: #d7ff3e;
-  --color-violet: #8b7bff;
-  --color-crimson: #ff3b5c;
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-coal: #252423;
+  --color-panel: #2e2c2b;
+  --color-cream: #f6f4f2;
+  --color-muted: #a8a5a1;
+  --color-red: #ff4b4b;
+  --color-orange: #ffa828;
+  --color-turquoise: #00ffaa;
+  --color-blue: #4d9cff;
+  --color-sky: #05dbe9;
+  --color-lime: #b7ff54;
+  --color-yellow: #ffcc2a;
+  --color-magenta: #e962bf;
+  --color-purple: #a369ff;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo-black), "Arial Black", ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 html {
@@ -17,15 +24,24 @@ html {
 }
 
 body {
-  background: var(--color-void);
-  color: var(--color-bone);
+  background: var(--color-coal);
+  color: var(--color-cream);
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--color-lime);
-  color: #0a0a0b;
+  background: var(--color-red);
+  color: var(--color-cream);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.hero-line {
+  overflow: hidden;
 }
 
 .hero-letter {
@@ -33,17 +49,37 @@ body {
   will-change: transform;
 }
 
+.wchar {
+  display: inline-block;
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
 .dot {
   will-change: transform, opacity;
 }
 
-.text-stroke {
-  -webkit-text-stroke: 1px rgba(245, 244, 239, 0.35);
-  color: transparent;
+.bdot {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #3b3835;
+  place-self: center;
+}
+
+.scroll-path {
+  will-change: stroke-dashoffset;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

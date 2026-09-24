@@ -54,18 +54,24 @@ export default function DragBox() {
 
   return (
     <Section
-      id="drag"
-      index="05 — springs + draggable"
-      title="Throw the box"
-      blurb="createDraggable() with a spring release ease — grab the lime box, fling it, and watch real spring physics settle it. Drag it over a target to light it up."
+      id="springs"
+      index="08"
+      eyebrow="springs"
+      title={
+        <>
+          Throw <span className="text-lime">the box.</span>
+        </>
+      }
+      blurb="createDraggable() with a spring release ease — grab the box, fling it, and watch real spring physics settle it. Drag it over a target to light it up."
+      accent="#b7ff54"
     >
       <div ref={root} className="rounded-3xl border border-white/10 bg-panel p-6 sm:p-10">
-        <div className="drag-area relative h-[46vh] min-h-[320px] overflow-hidden rounded-2xl border border-dashed border-white/15 bg-void">
+        <div className="drag-area relative h-[46vh] min-h-[320px] overflow-hidden rounded-2xl border border-dashed border-white/15 bg-coal">
           {[
-            { l: "12%", t: "18%", c: "#8b7bff" },
-            { l: "78%", t: "14%", c: "#ff3b5c" },
-            { l: "70%", t: "68%", c: "#d7ff3e" },
-            { l: "16%", t: "66%", c: "#f5f4ef" },
+            { l: "12%", t: "18%", c: "#a369ff" },
+            { l: "78%", t: "14%", c: "#ff4b4b" },
+            { l: "70%", t: "68%", c: "#b7ff54" },
+            { l: "16%", t: "66%", c: "#f6f4f2" },
           ].map((p, i) => (
             <div
               key={i}
@@ -73,11 +79,11 @@ export default function DragBox() {
               style={{ left: p.l, top: p.t, background: p.c }}
             />
           ))}
-          <div className="drag-box absolute left-1/2 top-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 cursor-grab place-items-center rounded-2xl bg-lime font-mono text-2xl font-bold text-void active:cursor-grabbing">
+          <div className="drag-box absolute left-1/2 top-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 cursor-grab place-items-center rounded-2xl bg-lime font-mono text-2xl font-bold text-coal active:cursor-grabbing">
             ▣
           </div>
         </div>
-        <p className="mt-6 text-center font-mono text-xs uppercase tracking-[0.25em] text-dim">
+        <p className="mt-6 text-center font-mono text-xs uppercase tracking-[0.25em] text-muted">
           throws: <span className="text-lime">{throws}</span> · spring stiffness 140 · damping 7
         </p>
       </div>

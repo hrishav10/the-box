@@ -1,12 +1,15 @@
 import Nav from "@/components/Nav";
+import Backdrop from "@/components/Backdrop";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
-import DotGrid from "@/components/DotGrid";
+import ApiDemo from "@/components/ApiDemo";
+import Transforms from "@/components/Transforms";
 import ScrollDraw from "@/components/ScrollDraw";
+import DotGrid from "@/components/DotGrid";
 import MorphLab from "@/components/MorphLab";
 import MotionPath from "@/components/MotionPath";
 import DragBox from "@/components/DragBox";
-import TextFx from "@/components/TextFx";
+import Clockwork from "@/components/Clockwork";
 import Easings from "@/components/Easings";
 import Footer from "@/components/Footer";
 
@@ -14,15 +17,18 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main>
+      <Backdrop />
+      <main className="relative">
         <Hero />
         <Ticker />
-        <DotGrid />
+        <ApiDemo />
+        <Transforms />
         <ScrollDraw />
+        <DotGrid />
         <MorphLab />
         <MotionPath />
         <DragBox />
-        <TextFx />
+        <Clockwork />
         <Easings />
       </main>
       <Footer />

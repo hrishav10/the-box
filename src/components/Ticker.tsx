@@ -3,17 +3,26 @@
 import { useEffect, useRef } from "react";
 import { animate } from "animejs";
 
-const WORDS = ["timelines", "stagger", "springs", "morph", "motion path", "scroll sync", "draggable", "easings"];
+const ITEMS = [
+  "timelines",
+  "stagger",
+  "scroll sync",
+  "svg morph",
+  "motion path",
+  "springs",
+  "draggable",
+  "easings",
+];
 
 export default function Ticker() {
-  const track = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || !track.current) return;
-    const anim = animate(track.current, {
+    const el = ref.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const anim = animate(el, {
       x: ["0%", "-50%"],
-      duration: 14000,
+      duration: 22000,
       ease: "linear",
       loop: true,
     });
@@ -22,22 +31,19 @@ export default function Ticker() {
     };
   }, []);
 
-  const row = (key: string) => (
-    <div key={key} className="flex shrink-0 items-center">
-      {WORDS.map((w) => (
-        <span key={key + w} className="flex items-center">
-          <span className="px-6 font-mono text-sm uppercase tracking-[0.3em] text-dim">{w}</span>
-          <span className="text-lime">✦</span>
-        </span>
-      ))}
-    </div>
-  );
+  const row = [...ITEMS, ...ITEMS];
 
   return (
-    <div className="overflow-hidden border-y border-white/10 bg-panel py-4">
-      <div ref={track} className="flex w-max">
-        {row("a")}
-        {row("b")}
+    <div className="relative z-10 overflow-hidden border-y border-white/10 bg-panel/60 py-4">
+      <div ref={ref} className="flex w-max items-center gap-8 whitespace-nowrap">
+        {row.map((t, i) => (
+          <span key={i} className="flex items-center gap-8">
+            <span className="font-mono text-sm font-bold uppercase tracking-[0.25em] text-cream">
+              {t}
+            </span>
+            <span className="text-red">●</span>
+          </span>
+        ))}
       </div>
     </div>
   );

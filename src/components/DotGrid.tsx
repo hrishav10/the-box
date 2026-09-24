@@ -24,7 +24,7 @@ export default function DotGrid() {
         { to: 1, duration: 700, ease: "outElastic(1, .45)" },
       ],
       backgroundColor: [
-        { to: "#d7ff3e", duration: 200 },
+        { to: "#4d9cff", duration: 200 },
         { to: "#3a3a3e", duration: 900 },
       ],
       delay: (_el: unknown, i: number = 0) => {
@@ -61,9 +61,15 @@ export default function DotGrid() {
   return (
     <Section
       id="stagger"
-      index="01 — stagger"
-      title="The ripple grid"
-      blurb="169 dots, one stagger() call. Move your cursor across the grid — each ripple radiates from the dot under your pointer, delayed by distance. The idle wave fires from the center every few seconds."
+      index="04"
+      eyebrow="stagger"
+      title={
+        <>
+          One ripple, <span className="text-blue">169 dots.</span>
+        </>
+      }
+      blurb="Move your cursor across the grid — each ripple radiates from the dot under your pointer, delayed by distance. The idle wave fires from the center every few seconds."
+      accent="#4d9cff"
     >
       <div className="rounded-3xl border border-white/10 bg-panel p-6 sm:p-10">
         <div
@@ -87,13 +93,13 @@ export default function DotGrid() {
           ))}
         </div>
         <div className="mt-8 flex items-center justify-between">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-dim">
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-muted">
             delay: distance × 55ms
           </p>
           <button
             onClick={() => setAuto((v) => !v)}
             className={`rounded-full px-5 py-2 font-mono text-xs font-bold uppercase tracking-[0.15em] transition-colors ${
-              auto ? "bg-lime text-void" : "border border-white/20 text-dim hover:text-bone"
+              auto ? "bg-lime text-coal" : "border border-white/20 text-muted hover:text-cream"
             }`}
           >
             auto-wave {auto ? "on" : "off"}
