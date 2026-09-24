@@ -310,6 +310,8 @@ export default function Cube() {
 
     const tl = createTimeline({ autoplay: false });
     tl.add(".cube-hint", { opacity: [1, 0], duration: 500 }, 700);
+    // heading gets out of the way before the top layer flies up
+    tl.add(".cube-title-el", { opacity: [1, 0], duration: 600 }, 1200);
 
     // explode, corners first (per-cubelet targets keep types simple)
     CUBELETS.forEach(([x, y, z]) => {
@@ -350,6 +352,7 @@ export default function Cube() {
     tl.add("#cube-paper", { opacity: [1, 0], duration: 900 }, 10500)
       .add("#cube-ink", { opacity: [0, 1], duration: 900 }, 10500)
       .add(".cube-title-el", { color: ["#38352f", "#f4f1ea"], duration: 900 }, 10500)
+      .add(".cube-title-el", { opacity: [0, 1], duration: 600 }, 9800)
       .add(".stage-bg", { backgroundColor: ["#f4f1ea", "#252423"], duration: 900 }, 10500);
 
     const scroll = onScroll({
