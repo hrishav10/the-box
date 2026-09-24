@@ -55,7 +55,7 @@ export default function DragBox() {
   return (
     <Section
       id="springs"
-      index="08"
+      index="07"
       eyebrow="springs"
       title={
         <>

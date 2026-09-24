@@ -14,16 +14,17 @@ export function useAccent<T extends HTMLElement = HTMLElement>(color: string) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const dispatch = () => {
+      window.dispatchEvent(new CustomEvent<string>("box:accent", { detail: color }));
+    };
     const obs = onScroll({
       target: el,
       enter: "top 65%",
       leave: "bottom 35%",
-      onEnter: () => {
-        window.dispatchEvent(new CustomEvent<string>("box:accent", { detail: color }));
-      },
-      onLeave: () => {
-        window.dispatchEvent(new CustomEvent<string>("box:accent", { detail: color }));
-      },
+      onEnter: dispatch,
+      onLeave: dispatch,
+      onEnterBackward: dispatch,
+      onLeaveBackward: dispatch,
     });
     return () => {
       obs.revert();

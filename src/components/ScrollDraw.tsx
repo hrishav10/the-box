@@ -19,8 +19,8 @@ export default function ScrollDraw() {
       autoplay: onScroll({
         target: svg,
         sync: true,
-        enter: "bottom bottom",
-        leave: "top top",
+        enter: "top top",
+        leave: "bottom bottom",
       }),
       onUpdate: (self: { progress: number }) => setPct(Math.round(self.progress)),
     });

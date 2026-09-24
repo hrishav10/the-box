@@ -21,10 +21,9 @@ export default function Clockwork() {
     const ticks = el.querySelectorAll(".tick");
     if (!reduced) {
       animate(ticks, {
-        y: [0, -130],
         opacity: [0, 1],
-        scale: [0.3, 1],
-        duration: 700,
+        scale: [0, 1],
+        duration: 600,
         ease: "outExpo",
         delay: stagger(14),
         autoplay: onScroll({ target: el, enter: "bottom 75%" }),
@@ -48,7 +47,7 @@ export default function Clockwork() {
   return (
     <Section
       id="clock"
-      index="07"
+      index="08"
       eyebrow="clockwork"
       title={
         <>
@@ -65,12 +64,11 @@ export default function Clockwork() {
         {Array.from({ length: TICKS }).map((_, i) => (
           <div
             key={i}
-            className="tick absolute left-1/2 top-1/2"
-            style={{ transform: `rotate(${i * 6}deg)` }}
+            className="absolute left-1/2 top-1/2"
+            style={{ transform: `translate(-50%, -50%) rotate(${i * 6}deg) translateY(-140px)` }}
           >
             <div
-              className={i % 5 === 0 ? "h-4 w-1 rounded bg-yellow" : "h-2 w-px bg-muted"}
-              style={{ transform: "translate(-50%, 0)" }}
+              className={`tick ${i % 5 === 0 ? "h-4 w-1 rounded bg-yellow" : "h-2 w-px bg-muted"}`}
             />
           </div>
         ))}
