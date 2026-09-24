@@ -7,10 +7,10 @@ import { useAccent } from "@/hooks/useAccent";
 const LEADERS = [
   { text: "TIMELINE", color: "#e08d57", ax: 215, ay: 225, tx: 140, ty: 150 },
   { text: "STAGGER", color: "#4d9cff", ax: 215, ay: 430, tx: 140, ty: 330 },
-  { text: "SCROLL", color: "#00ffaa", ax: 215, ay: 720, tx: 140, ty: 540 },
-  { text: "SPRING", color: "#b7ff54", ax: 385, ay: 330, tx: 460, ty: 210, right: true },
-  { text: "SVG", color: "#05dbe9", ax: 385, ay: 620, tx: 460, ty: 390, right: true },
-  { text: "DRAGGABLE", color: "#e962bf", ax: 385, ay: 896, tx: 460, ty: 590, right: true },
+  { text: "SCROLL", color: "#00ffaa", ax: 232, ay: 700, tx: 140, ty: 540 },
+  { text: "SPRING", color: "#b7ff54", ax: 352, ay: 330, tx: 460, ty: 210, right: true },
+  { text: "SVG", color: "#05dbe9", ax: 400, ay: 620, tx: 460, ty: 390, right: true },
+  { text: "DRAGGABLE", color: "#e962bf", ax: 360, ay: 896, tx: 460, ty: 590, right: true },
 ];
 
 /**
@@ -18,7 +18,8 @@ const LEADERS = [
  * A pinned full-viewport stage scrubbed by scroll: shells detach, the lens
  * stack (front group, aperture, focus group, rear group) separates upward
  * off the mount, body internals (sensor, PCB, battery, screen) drop below,
- * the render cross-fades to wireframe, and leader lines annotate the build.
+ * the render cross-fades to wireframe, leader lines annotate the exploded
+ * build, parts reassemble, and the stage powers back to dark.
  */
 export default function Camera() {
   const pin = useRef<HTMLDivElement>(null);
@@ -98,29 +99,30 @@ export default function Camera() {
       .add("#device-wire", { opacity: [0, 1], duration: 900 }, 5700)
       .add(".axis", { opacity: 0, duration: 600 }, 5800)
       .add(".m-head", { opacity: [0, 1], y: [24, 0], duration: 900 }, 6200)
-      // 4 — reassemble in wireframe.
-      .add(".p-shell-l, .w-shell-l", { x: 0, y: 0, rotate: 0, duration: 1500 }, 6800)
-      .add(".p-shell-r, .w-shell-r", { x: 0, y: 0, rotate: 0, duration: 1500 }, 6800)
-      .add(".p-top, .w-top", { y: 0, duration: 1400 }, 7000)
-      .add(".p-front, .w-front", { y: 0, duration: 1400 }, 7100)
-      .add(".p-aperture, .w-aperture", { y: 0, duration: 1400 }, 7200)
-      .add(".p-focus, .w-focus", { y: 0, duration: 1400 }, 7300)
-      .add(".p-rear, .w-rear", { y: 0, duration: 1400 }, 7400)
-      .add(".p-mount, .w-mount", { y: 0, duration: 1400 }, 7500)
-      .add(".p-sensor, .w-sensor", { y: 0, duration: 1400 }, 7600)
-      .add(".p-pcb, .w-pcb", { y: 0, duration: 1400 }, 7700)
-      .add(".p-battery, .w-battery", { y: 0, duration: 1400 }, 7800)
-      .add(".p-screen, .w-screen", { x: 0, y: 0, duration: 1400 }, 7900)
-      .add(".p-base, .w-base", { y: 0, duration: 1400 }, 8000)
-      .add("#device-tilt", { rotate: 0, duration: 1500 }, 7000)
-      // 5 — leader lines + module labels draw in.
-      .add(drawables, { draw: ["0 0", "0 1"], duration: 900, ease: "linear" }, 8700)
-      .add(".anno-labels", { opacity: [0, 1], duration: 600 }, 9000)
+      // 4 — leader lines + module labels draw in over the exploded wireframe.
+      .add(drawables, { draw: ["0 0", "0 1"], duration: 900, ease: "linear" }, 6800)
+      .add(".anno-labels", { opacity: [0, 1], duration: 600 }, 7100)
+      // 5 — reassemble in wireframe.
+      .add(".anno-labels", { opacity: [1, 0], duration: 700 }, 8100)
+      .add("#leaders", { opacity: [1, 0], duration: 700 }, 8100)
+      .add(".m-head", { opacity: 0, duration: 700 }, 8100)
+      .add(".p-shell-l, .w-shell-l", { x: 0, y: 0, rotate: 0, duration: 1500 }, 8300)
+      .add(".p-shell-r, .w-shell-r", { x: 0, y: 0, rotate: 0, duration: 1500 }, 8300)
+      .add(".p-top, .w-top", { y: 0, duration: 1400 }, 8500)
+      .add(".p-front, .w-front", { y: 0, duration: 1400 }, 8600)
+      .add(".p-aperture, .w-aperture", { y: 0, duration: 1400 }, 8700)
+      .add(".p-focus, .w-focus", { y: 0, duration: 1400 }, 8800)
+      .add(".p-rear, .w-rear", { y: 0, duration: 1400 }, 8900)
+      .add(".p-mount, .w-mount", { y: 0, duration: 1400 }, 9000)
+      .add(".p-sensor, .w-sensor", { y: 0, duration: 1400 }, 9100)
+      .add(".p-pcb, .w-pcb", { y: 0, duration: 1400 }, 9200)
+      .add(".p-battery, .w-battery", { y: 0, duration: 1400 }, 9300)
+      .add(".p-screen, .w-screen", { x: 0, y: 0, duration: 1400 }, 9400)
+      .add(".p-base, .w-base", { y: 0, duration: 1400 }, 9500)
+      .add("#device-tilt", { rotate: 0, duration: 1500 }, 8500)
       // 6 — power down: fade back to dark for the next chapter.
-      .add(".anno-labels", { opacity: [1, 0], duration: 700 }, 9900)
-      .add(".m-head", { opacity: 0, duration: 700 }, 9900)
-      .add("#device-wire", { opacity: [1, 0], duration: 800 }, 10000)
-      .add(".stage-bg", { backgroundColor: ["#f6f4f2", "#252423"], duration: 900 }, 10000);
+      .add("#device-wire", { opacity: [1, 0], duration: 800 }, 10100)
+      .add(".stage-bg", { backgroundColor: ["#f6f4f2", "#252423"], duration: 900 }, 10100);
 
     return () => {
       tl.pause();
