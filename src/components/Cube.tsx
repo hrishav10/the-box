@@ -89,6 +89,52 @@ function Cubelet({ x, y, z }: { x: number; y: number; z: number }) {
   );
 }
 
+/** one screw post of the core: shaft, thread ticks, spring, screw head.
+ *  hidden posts render dashed (patent-drawing convention). */
+function Post({ c, h, dir, hidden }: {
+  c: [number, number]; h: number; dir: [number, number]; hidden?: boolean;
+}) {
+  const postLen = S * 0.52;
+  const shaftW = 7;
+  const dl = Math.hypot(dir[0], dir[1]) || 1;
+  const u: [number, number] = [dir[0] / dl, dir[1] / dl];
+  const px: [number, number] = [-u[1], u[0]];
+  const a = add(c, mul(u, h * 0.9));
+  const b = add(c, mul(u, h + postLen));
+  const w = shaftW;
+  const a1 = add(a, mul(px, w));
+  const a2 = add(a, mul(px, -w));
+  const b1 = add(b, mul(px, w));
+  const b2 = add(b, mul(px, -w));
+  const ticks = [0.2, 0.35, 0.5, 0.65, 0.8].map((t) => {
+    const p1 = add(add(a, mul(px, w)), mul(u, postLen * t));
+    const p2 = add(add(a, mul(px, -w)), mul(u, postLen * t));
+    return [p1, p2] as [[number, number], [number, number]];
+  });
+  const springPts = Array.from({ length: 13 }, (_, k) => {
+    const t = 0.08 + (k / 12) * 0.84;
+    const off = Math.sin((k / 12) * Math.PI * 6) * (w + 5);
+    const p = add(add(a, mul(px, off)), mul(u, postLen * t));
+    return `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
+  }).join(" ");
+  return (
+    <g opacity={hidden ? 0.4 : 1} strokeDasharray={hidden ? "5 4" : undefined}>
+      <polygon points={pts([a1, b1, b2, a2])} fill="currentColor"
+        fillOpacity={0.06} strokeWidth={1.6} strokeLinejoin="round" />
+      {ticks.map(([p1, p2], i) => (
+        <line key={i} x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]}
+          strokeWidth={1} opacity={0.7} />
+      ))}
+      {!hidden && <polyline points={springPts} fill="none" strokeWidth={1.2} opacity={0.85} />}
+      <circle cx={a[0]} cy={a[1]} r={w + 2.5} strokeWidth={1.4} />
+      {/* screw head */}
+      <circle cx={b[0]} cy={b[1]} r={10} strokeWidth={1.8} />
+      <line x1={b[0] - 6} y1={b[1]} x2={b[0] + 6} y2={b[1]} strokeWidth={1.2} />
+      <line x1={b[0]} y1={b[1] - 6} x2={b[0]} y2={b[1] + 6} strokeWidth={1.2} />
+    </g>
+  );
+}
+
 /** core mechanism, grounded in real cube hardware:
  *  central cube with six screw posts (cf. Rubik's US4378117 core:
  *  "a central cube with six attached" arms; each arm carries a
@@ -102,53 +148,11 @@ function Core() {
   const nux: [number, number] = [-ux[0], -ux[1]];
   const nuy: [number, number] = [-uy[0], -uy[1]];
   const nuz: [number, number] = [-uz[0], -uz[1]];
-  const postLen = S * 0.52;
-  const shaftW = 7;
 
   const corner = (sx: number, sy: number, sz: number): [number, number] => [
     c[0] + (sx * ux[0] + sy * uy[0] + sz * uz[0]) * h,
     c[1] + (sx * ux[1] + sy * uy[1] + sz * uz[1]) * h,
   ];
-
-  function Post({ dir, hidden }: { dir: [number, number]; hidden?: boolean }) {
-    const dl = Math.hypot(dir[0], dir[1]) || 1;
-    const u: [number, number] = [dir[0] / dl, dir[1] / dl];
-    const px: [number, number] = [-u[1], u[0]];
-    const a = add(c, mul(u, h * 0.9));
-    const b = add(c, mul(u, h + postLen));
-    const w = shaftW;
-    const a1 = add(a, mul(px, w));
-    const a2 = add(a, mul(px, -w));
-    const b1 = add(b, mul(px, w));
-    const b2 = add(b, mul(px, -w));
-    const ticks = [0.2, 0.35, 0.5, 0.65, 0.8].map((t) => {
-      const p1 = add(add(a, mul(px, w)), mul(u, postLen * t));
-      const p2 = add(add(a, mul(px, -w)), mul(u, postLen * t));
-      return [p1, p2] as [[number, number], [number, number]];
-    });
-    const springPts = Array.from({ length: 13 }, (_, k) => {
-      const t = 0.08 + (k / 12) * 0.84;
-      const off = Math.sin((k / 12) * Math.PI * 6) * (w + 5);
-      const p = add(add(a, mul(px, off)), mul(u, postLen * t));
-      return `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
-    }).join(" ");
-    return (
-      <g opacity={hidden ? 0.4 : 1} strokeDasharray={hidden ? "5 4" : undefined}>
-        <polygon points={pts([a1, b1, b2, a2])} fill="currentColor"
-          fillOpacity={0.06} strokeWidth={1.6} strokeLinejoin="round" />
-        {ticks.map(([p1, p2], i) => (
-          <line key={i} x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]}
-            strokeWidth={1} opacity={0.7} />
-        ))}
-        {!hidden && <polyline points={springPts} fill="none" strokeWidth={1.2} opacity={0.85} />}
-        <circle cx={a[0]} cy={a[1]} r={w + 2.5} strokeWidth={1.4} />
-        {/* screw head */}
-        <circle cx={b[0]} cy={b[1]} r={10} strokeWidth={1.8} />
-        <line x1={b[0] - 6} y1={b[1]} x2={b[0] + 6} y2={b[1]} strokeWidth={1.2} />
-        <line x1={b[0]} y1={b[1] - 6} x2={b[0]} y2={b[1] + 6} strokeWidth={1.2} />
-      </g>
-    );
-  }
 
   const topF = [corner(-1, 1, -1), corner(1, 1, -1), corner(1, 1, 1), corner(-1, 1, 1)];
   const leftF = [corner(-1, -1, 1), corner(1, -1, 1), corner(1, 1, 1), corner(-1, 1, 1)];
@@ -157,9 +161,9 @@ function Core() {
   return (
     <g className="core" opacity={0} stroke="currentColor" fill="none">
       {/* hidden posts first */}
-      <Post dir={nux} hidden />
-      <Post dir={nuy} hidden />
-      <Post dir={nuz} hidden />
+      <Post c={c} h={h} dir={nux} hidden />
+      <Post c={c} h={h} dir={nuy} hidden />
+      <Post c={c} h={h} dir={nuz} hidden />
       {/* central cube */}
       <polygon points={pts(topF)} fill="currentColor" fillOpacity={0.05}
         strokeWidth={2} strokeLinejoin="round" />
@@ -169,9 +173,9 @@ function Core() {
         strokeWidth={2} strokeLinejoin="round" />
       <polygon points={pts(inset(topF, 0.8))} strokeWidth={0.9} opacity={0.55} />
       {/* visible posts */}
-      <Post dir={ux} />
-      <Post dir={uy} />
-      <Post dir={uz} />
+      <Post c={c} h={h} dir={ux} />
+      <Post c={c} h={h} dir={uy} />
+      <Post c={c} h={h} dir={uz} />
     </g>
   );
 }
