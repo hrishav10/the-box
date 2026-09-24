@@ -89,47 +89,99 @@ function Cubelet({ x, y, z }: { x: number; y: number; z: number }) {
   );
 }
 
-/** core mechanism revealed at full explosion */
+/** core mechanism, grounded in real cube hardware:
+ *  central cube with six screw posts (cf. Rubik's US4378117 core:
+ *  "a central cube with six attached" arms; each arm carries a
+ *  screw + spring that the center pieces ride on). */
 function Core() {
   const c: [number, number] = [CX, CY];
-  const dirs = [VX, mul(VX, -1), VZ, mul(VZ, -1), VY, mul(VY, -1)];
+  const h = S * 0.32; // central cube half-size
+  const ux: [number, number] = [VX[0] / S, VX[1] / S];
+  const uy: [number, number] = [VY[0] / S, VY[1] / S];
+  const uz: [number, number] = [VZ[0] / S, VZ[1] / S];
+  const nux: [number, number] = [-ux[0], -ux[1]];
+  const nuy: [number, number] = [-uy[0], -uy[1]];
+  const nuz: [number, number] = [-uz[0], -uz[1]];
+  const postLen = S * 0.52;
+  const shaftW = 7;
+
+  const corner = (sx: number, sy: number, sz: number): [number, number] => [
+    c[0] + (sx * ux[0] + sy * uy[0] + sz * uz[0]) * h,
+    c[1] + (sx * ux[1] + sy * uy[1] + sz * uz[1]) * h,
+  ];
+
+  function Post({ dir, hidden }: { dir: [number, number]; hidden?: boolean }) {
+    const dl = Math.hypot(dir[0], dir[1]) || 1;
+    const u: [number, number] = [dir[0] / dl, dir[1] / dl];
+    const px: [number, number] = [-u[1], u[0]];
+    const a = add(c, mul(u, h * 0.9));
+    const b = add(c, mul(u, h + postLen));
+    const w = shaftW;
+    const a1 = add(a, mul(px, w));
+    const a2 = add(a, mul(px, -w));
+    const b1 = add(b, mul(px, w));
+    const b2 = add(b, mul(px, -w));
+    const ticks = [0.2, 0.35, 0.5, 0.65, 0.8].map((t) => {
+      const p1 = add(add(a, mul(px, w)), mul(u, postLen * t));
+      const p2 = add(add(a, mul(px, -w)), mul(u, postLen * t));
+      return [p1, p2] as [[number, number], [number, number]];
+    });
+    const springPts = Array.from({ length: 13 }, (_, k) => {
+      const t = 0.08 + (k / 12) * 0.84;
+      const off = Math.sin((k / 12) * Math.PI * 6) * (w + 5);
+      const p = add(add(a, mul(px, off)), mul(u, postLen * t));
+      return `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
+    }).join(" ");
+    return (
+      <g opacity={hidden ? 0.4 : 1} strokeDasharray={hidden ? "5 4" : undefined}>
+        <polygon points={pts([a1, b1, b2, a2])} fill="currentColor"
+          fillOpacity={0.06} strokeWidth={1.6} strokeLinejoin="round" />
+        {ticks.map(([p1, p2], i) => (
+          <line key={i} x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]}
+            strokeWidth={1} opacity={0.7} />
+        ))}
+        {!hidden && <polyline points={springPts} fill="none" strokeWidth={1.2} opacity={0.85} />}
+        <circle cx={a[0]} cy={a[1]} r={w + 2.5} strokeWidth={1.4} />
+        {/* screw head */}
+        <circle cx={b[0]} cy={b[1]} r={10} strokeWidth={1.8} />
+        <line x1={b[0] - 6} y1={b[1]} x2={b[0] + 6} y2={b[1]} strokeWidth={1.2} />
+        <line x1={b[0]} y1={b[1] - 6} x2={b[0]} y2={b[1] + 6} strokeWidth={1.2} />
+      </g>
+    );
+  }
+
+  const topF = [corner(-1, 1, -1), corner(1, 1, -1), corner(1, 1, 1), corner(-1, 1, 1)];
+  const leftF = [corner(-1, -1, 1), corner(1, -1, 1), corner(1, 1, 1), corner(-1, 1, 1)];
+  const rightF = [corner(1, -1, -1), corner(1, -1, 1), corner(1, 1, 1), corner(1, 1, -1)];
+
   return (
     <g className="core" opacity={0} stroke="currentColor" fill="none">
-      {/* spindle axles */}
-      {dirs.map((d, i) => {
-        const e = add(c, mul(d, 0.52));
-        return (
-          <g key={i}>
-            <line x1={c[0]} y1={c[1]} x2={e[0]} y2={e[1]} strokeWidth={2} />
-            {/* spring zigzag */}
-            <polyline
-              points={Array.from({ length: 7 }, (_, k) => {
-                const t = 0.18 + (k / 6) * 0.3;
-                const px = c[0] + d[0] * t + (k % 2 === 0 ? 5 : -5) * (d[1] / S);
-                const py = c[1] + d[1] * t + (k % 2 === 0 ? 5 : -5) * (d[0] / S);
-                return `${px.toFixed(1)},${py.toFixed(1)}`;
-              }).join(" ")}
-              strokeWidth={1.1} opacity={0.8} />
-            <circle cx={e[0]} cy={e[1]} r={5} strokeWidth={1.6} />
-            <line x1={e[0] - 3} y1={e[1]} x2={e[0] + 3} y2={e[1]} strokeWidth={1.1} />
-          </g>
-        );
-      })}
-      {/* hub */}
-      <circle cx={c[0]} cy={c[1]} r={10} strokeWidth={2.2} />
-      <circle cx={c[0]} cy={c[1]} r={4} strokeWidth={1.2} opacity={0.7} />
+      {/* hidden posts first */}
+      <Post dir={nux} hidden />
+      <Post dir={nuy} hidden />
+      <Post dir={nuz} hidden />
+      {/* central cube */}
+      <polygon points={pts(topF)} fill="currentColor" fillOpacity={0.05}
+        strokeWidth={2} strokeLinejoin="round" />
+      <polygon points={pts(leftF)} fill="currentColor" fillOpacity={0.02}
+        strokeWidth={2} strokeLinejoin="round" />
+      <polygon points={pts(rightF)} fill="currentColor" fillOpacity={0.07}
+        strokeWidth={2} strokeLinejoin="round" />
+      <polygon points={pts(inset(topF, 0.8))} strokeWidth={0.9} opacity={0.55} />
+      {/* visible posts */}
+      <Post dir={ux} />
+      <Post dir={uy} />
+      <Post dir={uz} />
     </g>
   );
 }
 
 function Axes() {
-  const L = 3.4 * S;
   const lines: Array<[[number, number], [number, number]]> = [
     [[CX - VX[0] * 3.4, CY - VX[1] * 3.4], [CX + VX[0] * 3.4, CY + VX[1] * 3.4]],
     [[CX - VZ[0] * 3.4, CY - VZ[1] * 3.4], [CX + VZ[0] * 3.4, CY + VZ[1] * 3.4]],
     [[CX, CY + S * 3.4], [CX, CY - S * 3.4]],
   ];
-  void L;
   return (
     <g className="axes" opacity={0} stroke="currentColor" strokeWidth={1.2}
       strokeDasharray="26 6 7 6">
@@ -326,7 +378,7 @@ export default function Cube() {
           </div>
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg viewBox="0 0 1000 1000" className="h-[86vh] w-auto max-w-[96vw]" role="img"
+            <svg viewBox="0 0 1000 1000" className="h-[80vh] w-auto max-w-[96vw] mt-[7vh]" role="img"
               aria-label="Exploded axonometric drawing of a 3x3 twisty cube">
               <g id="cube-ink">
                 <g id="cubeArt">
